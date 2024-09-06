@@ -28,22 +28,22 @@ int main() {
             printf("\n");
             close(in);
             break;
-        default:                  
-            close(fildes[0]); 
-            int out = fildes[1];
-            char* message = "I'M TIRED";
-            for (char* msgLen = message; *msgLen != '\0'; msgLen++)
-            {
-                if(write(out, msgLen, 1) == 0) {
+       default:  
+            close(fildes[0]);
+            char buffer[BUFSIZ];
+            ssize_t bytesRead;
+
+            while ((bytesRead = read(STDIN_FILENO, buffer, BUFSIZ)) > 0) {
+                if (write(fildes[1], buffer, bytesRead) == -1) {
                     perror("write");
-                    close(out);
+                    close(fildes[1]);
                     exit(EXIT_FAILURE);
                 }
             }
-            close(out);
 
-            if (waitpid(pid, NULL, 0) == -1)
-            {
+            close(fildes[1]);  
+
+            if (waitpid(pid, NULL, 0) == -1) {
                 perror("wait");
                 exit(EXIT_FAILURE);
             }
