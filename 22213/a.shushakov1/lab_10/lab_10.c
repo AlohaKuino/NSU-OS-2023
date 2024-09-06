@@ -13,25 +13,27 @@ int main(int argc, char* argv[]){
         exit(EXIT_FAILURE);
     }
     switch(pid = fork()) {
-    case -1:
-            perror("Fork error");
-            exit(EXIT_FAILURE);
-            break;
-    case 0:
-            execvp(argv[1], argv+1);
-            perror("Exec error");
-            exit(EXIT_FAILURE);
-            break;
-    default: 
-        if (waitpid(pid, &status, 0) == -1) {
-            perror("Waitpid error");
-            exit(EXIT_FAILURE);
-        }
-        if (WIFEXITED(status)) {
-            printf("Exit code: %d", WEXITSTATUS(status));
-        } else {
-            fprintf(stderr, "Process was terminated in a bad way");
-        }
+        case -1:
+                perror("Fork error");
+                exit(EXIT_FAILURE);
+                break;
+        case 0:
+                execvp(argv[1], argv+1);
+                perror("Exec error");
+                exit(EXIT_FAILURE);
+                break;
+        default: 
+            if (waitpid(pid, &status, 0) == -1) {
+                perror("Waitpid error");
+                exit(EXIT_FAILURE);
+            }
+            if (WIFEXITED(status)) {
+                printf("\nExit code: %d\n", WEXITSTATUS(status));
+            } else if (WIFSIGNALED(status)) {
+                printf("\nSignal terminated procces: %d\n", WTERMSIG(status));
+            } else {
+                fprintf(stderr, "\nProcess was terminated in a bad way\n");
+            }
     }
     return 0;
 }
