@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
     }
     switch(pid = fork()) {
     case -1:
-            perror("fork error");
+            perror("Fork error");
             exit(EXIT_FAILURE);
             break;
     case 0:
@@ -22,13 +22,16 @@ int main(int argc, char* argv[]){
             perror("Exec error");
             exit(EXIT_FAILURE);
             break;
-    default:
-            if (waitpid(pid, &status, 0) == -1) {
-                perror("waitpid error");
-                exit(EXIT_FAILURE);
-            } else {
-                printf("\nCode %d\n", status);
-            }
+    default: 
+        if (waitpid(pid, &status, 0) == -1) {
+            perror("Waitpid error");
+            exit(EXIT_FAILURE);
+        }
+        if (WIFEXITED(status)) {
+            printf("Exit code: %d", WEXITSTATUS(status));
+        } else {
+            fprintf(stderr, "Process was terminated in a bad way");
+        }
     }
     return 0;
 }
