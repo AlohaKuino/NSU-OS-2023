@@ -8,7 +8,7 @@ int main(){
     int ifError;
     int child_status;
     pid_t ifError0;
-    printf("\nDoing shit\n\n");
+    printf("\nDoing smth\n\n");
     pid_t pid_1 = fork();
  
     switch(pid_1){
