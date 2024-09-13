@@ -7,13 +7,6 @@
 
 #define MAX_PATTERN_LEN 256
 
-void check_error(void *ptr, const char *message) {
-    if (!ptr) {
-        perror(message);
-        exit(EXIT_FAILURE);
-    }
-}
-
 void sanitize_input(char *input) {
     if (strchr(input, '/')) {
         fprintf(stderr, "Error: '/' is not allowed in the pattern.\n");
@@ -38,7 +31,11 @@ int main() {
     sanitize_input(pattern);
 
     DIR *directory = opendir(".");
-    check_error(directory, "Error opening directory");
+
+    if (!directory) {
+        perror("Error opening directory");
+        exit(EXIT_FAILURE);
+    }
 
     struct dirent64 *entry;
     int match_found = 0;
