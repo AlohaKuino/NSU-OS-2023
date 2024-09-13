@@ -5,7 +5,7 @@ int main(int argc, char **argv) {
     FILE *in, *out;
     char line[BUFSIZ];
 
-    if(argc < 1){
+    if(argc < 2){
         fprintf(stderr, "No arguments given");
     }
 
