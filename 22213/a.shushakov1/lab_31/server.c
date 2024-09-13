@@ -44,7 +44,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    if (listen(server_socket, 2) == -1) {
+    if (listen(server_socket, 5) == -1) {
         perror("listen error");
         unlink(SOCKET_PATH);
         close(server_socket);
@@ -74,6 +74,7 @@ int main() {
                     if ((client_socket = accept(server_socket, NULL, NULL)) == -1) {
                         perror("accept error");
                         unlink(SOCKET_PATH);
+                        exit(EXIT_FAILURE);
                     } else {
                         FD_SET(client_socket, &active_sockets);
                         if (client_socket > max_socket_count) {
@@ -101,9 +102,5 @@ int main() {
                 }
             }
         }
-    }
-
-    close(server_socket);
-    unlink(SOCKET_PATH);
-    return 0;
+    }    
 }
